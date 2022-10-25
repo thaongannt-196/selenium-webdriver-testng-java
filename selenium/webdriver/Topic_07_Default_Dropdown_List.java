@@ -1,10 +1,12 @@
 package webdriver;
 
+import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
@@ -88,8 +90,28 @@ public class Topic_07_Default_Dropdown_List {
 	}
 
 	@Test
-	public void TC_02_() {
+	public void TC_02_Default_Dropdown() {
+		driver.get("https://rode.com/en/support/where-to-buy");
 		
+		select = new Select(driver.findElement(By.cssSelector("select#country"))); 
+		
+		// verify dropdown là single hay multiple
+		Assert.assertFalse(select.isMultiple());
+		
+		// chọn item có text = Vietnam
+		select.selectByValue("Vietnam");
+		sleepInSecond(3);
+		
+		// verify giá trị đã chọn thành công
+		Assert.assertEquals(select.getFirstSelectedOption().getText(), "Vietnam");
+		
+		driver.findElement(By.xpath("//button[text()='Search']")).click();
+		
+		List<WebElement> dealers = driver.findElements(By.cssSelector("div#map h4"));
+		
+		for (WebElement element : dealers) {
+			System.out.println(element.getText());
+		}
 	}
 
 	
