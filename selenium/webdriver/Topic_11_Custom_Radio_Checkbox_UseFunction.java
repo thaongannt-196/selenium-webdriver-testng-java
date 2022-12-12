@@ -153,8 +153,25 @@ public class Topic_10_Default_Radio_Checkbox_UseFunction {
 		// vừa chọn vừa verify
 		for (WebElement checkbox : allCheckboxes) {
 			uncheckToCheckboxOrRadio(checkbox);
-		}
+		}	
+	}
+	
+	@Test
+	public void TC_04_Select_All() {
+		driver.get("https://demos.telerik.com/kendo-ui/checkbox/index");
+		sleepInSecond(5);
 		
+		checkToCheckboxOrRadio("//label[text()='Dual-zone air conditioning']/preceding-sibling::input");
+		Assert.assertTrue(isElementSelected("//label[text()='Dual-zone air conditioning']/preceding-sibling::input"));
+		
+		uncheckToCheckboxOrRadio("//label[text()='Dual-zone air conditioning']/preceding-sibling::input");
+		Assert.assertFalse(isElementSelected("//label[text()='Dual-zone air conditioning']/preceding-sibling::input"));
+		
+		driver.get("https://demos.telerik.com/kendo-ui/radiobutton/index");
+		sleepInSecond(5);
+		
+		checkToCheckboxOrRadio("//label[text()='2.0 Petrol, 147kW']/preceding-sibling::input");
+		Assert.assertTrue(isElementSelected("//label[text()='2.0 Petrol, 147kW']/preceding-sibling::input"));
 	}
 	
 	@AfterClass
