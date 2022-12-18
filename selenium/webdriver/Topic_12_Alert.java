@@ -89,6 +89,50 @@ public class Topic_12_Alert {
 		Assert.assertEquals(driver.findElement(By.cssSelector("p#result")).getText(), "You entered: " + keyword);
 	}
 	
+	@Test
+	public void TC_04_Accept_Alert_Login() {
+		driver.get("https://demo.guru99.com/v4");
+				
+		driver.findElement(By.name("btnLogin")).click();
+		sleepInSecond(3);
+		
+		alert = driver.switchTo().alert();
+		
+		// verify alert title
+		Assert.assertEquals(alert.getText(), "User or Password is not valid");
+		
+		// accept alert
+		alert.accept();
+		sleepInSecond(2);
+		
+		// verify app url
+		Assert.assertEquals(driver.getCurrentUrl(), "https://demo.guru99.com/v4/index.php");
+	}
+
+	@Test
+	public void TC_05_Authentication_Alert_1() {
+		// pass hẳn user/ password vào url trước khi open nó ra
+		// url: http://the-internet.herokuapp.com/basic_auth
+		// pass: username/ password vào url
+		// http://username:password@the-internet.herokuapp.com/basic_auth
+		
+		driver.get("http://admin:admin@the-internet.herokuapp.com/basic_auth");
+			
+		Assert.assertTrue(driver.findElement(By.cssSelector("div.example>p")).getText().contains("Congratulations! You must have the proper credentials."));
+	}
+	
+	@Test
+	public void TC_06_Authentication_Alert_2() {
+		driver.get("http://admin:admin@the-internet.herokuapp.com");
+		
+		String basicAuthenUrl = driver.findElement(By.xpath("//a[text()='Basic Auth']")).getAttribute("href");
+		
+		driver.get(getAuthenticationUrl(basicAuthenUrl, "admin", "admin"));
+		sleepInSecond(5);
+		
+		Assert.assertTrue(driver.findElement(By.cssSelector("div.example>p")).getText().contains("Congratulations! You must have the proper credentials."));
+	}
+	
 	// Sleep cứng (static wait)
 	public void sleepInSecond(long timeInSecond) {
 		try {
@@ -99,7 +143,13 @@ public class Topic_12_Alert {
 		}
 	}
 	
-
+	public String getAuthenticationUrl(String basicAuthenUrl, String username, String password) {
+		String[] authenUrlArray = basicAuthenUrl.split("//");
+		basicAuthenUrl = authenUrlArray[0] + "//" + username + ":" + password + "@" + authenUrlArray[1];
+		
+		return basicAuthenUrl;
+	}
+	
 	@AfterClass
 	public void afterClass() {
 		// Bước 6: Đóng browser
